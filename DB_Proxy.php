@@ -1,20 +1,18 @@
 <?php
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2013 Masayuki Nii, All rights reserved.
- *
+ * 
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2014 Masayuki Nii, All rights reserved.
+ * 
  *   This project started at the end of 2009.
  *   INTER-Mediator is supplied under MIT License.
  */
-/**
- * Created by JetBrains PhpStorm.
- * User: msyk
- * Date: 12/05/05
- * Time: 20:24
- * To change this template use File | Settings | File Templates.
- */
 
+require_once(dirname(__FILE__) . '/INTERMediator_Lib.php');
+
+/**
+ * Class DB_Proxy
+ */
 class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
 {
     /**
@@ -468,6 +466,9 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         $generatedPrivateKey = '';
         $passPhrase = '';
 
+        /*
+         * Decide the params.php file and load it.
+         */
         $currentDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
         $currentDirParam = $currentDir . 'params.php';
         $parentDirParam = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'params.php';
@@ -476,26 +477,9 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         } else if (file_exists($currentDirParam)) {
             include($currentDirParam);
         }
-
-        $messageClass = null;
-        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-            $clientLangArray = explode(',', $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
-            foreach ($clientLangArray as $oneLanguage) {
-                $langCountry = explode(';', $oneLanguage);
-                if (strlen($langCountry[0]) > 0) {
-                    $clientLang = explode('-', $langCountry[0]);
-                    $messageClass = "MessageStrings_$clientLang[0]";
-                    if (file_exists("{$currentDir}{$messageClass}.php")) {
-                        $messageClass = new $messageClass();
-                        break;
-                    }
-                }
-                $messageClass = null;
-            }
-        }
-        if ($messageClass == null) {
-            $messageClass = new MessageStrings();
-        }
+        
+        $imlib = new INTERMediator_Lib();
+        $messageClass = $imlib->loadMessageClass();
 
         $tableInfo = $this->dbSettings->getDataSourceTargetArray();
         $access = is_null($access) ? $_POST['access'] : $access;
