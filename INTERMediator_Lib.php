@@ -70,7 +70,9 @@ class INTERMediator_Lib
             if (file_exists($path)) {
                 $body = file_get_contents($path);
                 $doc = new DOMDocument();
+                libxml_use_internal_errors(true);
                 $doc->loadHTML($body);
+                libxml_clear_errors();
                 $xpath = new DOMXPath($doc);
                 $node = $doc->getElementsByTagName('title');
                 if ($node) {
