@@ -56,9 +56,15 @@ $prohibitSetWriteCriticalFields = true;
 //$prohibitIgnoreCondition = true;
 
 /*
-Command to generate the following RSA key:
-$ openssl genrsa -out gen.key 512
+ * A random string used in security hashing methods.
+ * (Please replace this.)
+ */
+$securitySalt = 'a570ced0cb07d7e5160836694f3f2548c14cd4c5';
 
+/*
+ * Command to generate the following RSA key:
+ * $ openssl genrsa -out gen.key 512
+ * (Please replace this.)
 */
 $passPhrase = '';
 $generatedPrivateKey = <<<EOL

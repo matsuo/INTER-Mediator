@@ -1,18 +1,17 @@
 <?php
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2013 Masayuki Nii, All rights reserved.
- *
+ * 
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2014 Masayuki Nii, All rights reserved.
+ * 
  *   This project started at the end of 2009.
  *   INTER-Mediator is supplied under MIT License.
  */
+
+require_once(dirname(__FILE__) . '/INTERMediator_Lib.php');
+
 /**
- * Created by JetBrains PhpStorm.
- * User: msyk
- * Date: 2012/10/10
- * Time: 20:07
- * To change this template use File | Settings | File Templates.
+ * Class GenerateJSCode
  */
 class GenerateJSCode
 {
@@ -55,10 +54,11 @@ class GenerateJSCode
         } else if (file_exists($currentDirParam)) {
             include($currentDirParam);
         }
-
+        
         /*
          * Read the JS programs regarding by the developing or deployed.
          */
+        $currentDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
         if (file_exists($currentDir . 'INTER-Mediator-Lib.js')) {
             $jsLibDir = $currentDir . 'lib' . DIRECTORY_SEPARATOR . 'js_lib' . DIRECTORY_SEPARATOR;
             $bi2phpDir = $currentDir . 'lib' . DIRECTORY_SEPARATOR . 'bi2php' . DIRECTORY_SEPARATOR;
@@ -160,24 +160,9 @@ class GenerateJSCode
         $this->generateAssignJS(
             "INTERMediatorOnPage.isEmailAsUsername", $isEmailAsUsernae ? "true" : "false");
 
-        $messageClass = null;
-        $clientLangArray = explode(',', $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
-        foreach ($clientLangArray as $oneLanguage) {
-            $langCountry = explode(';', $oneLanguage);
-            if (strlen($langCountry[0]) > 0) {
-                $clientLang = explode('-', $langCountry[0]);
-                $messageClass = "MessageStrings_$clientLang[0]";
-                if (file_exists("$currentDir$messageClass.php")) {
-                    $messageClass = new $messageClass();
-                    break;
-                }
-            }
-            $messageClass = null;
-        }
-        if ($messageClass == null) {
-            require_once('MessageStrings.php');
-            $messageClass = new MessageStrings();
-        }
+        $imlib = new INTERMediator_Lib();
+        $messageClass = $imlib->loadMessageClass();
+
         $this->generateAssignJS(
             "INTERMediatorOnPage.getMessages",
             "function(){return ", arrayToJS($messageClass->getMessages(), ''), ";}");
