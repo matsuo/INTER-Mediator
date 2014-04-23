@@ -1,12 +1,12 @@
 <?php
 /*
-* INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
-*
-*   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010 Masayuki Nii, All rights reserved.
-*
-*   This project started at the end of 2009.
-*   INTER-Mediator is supplied under MIT License.
-*/
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ * 
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2014 Masayuki Nii, All rights reserved.
+ * 
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
 
 /*
  * common settings for DB_FileMaker_FX and DB_PDO:
@@ -54,12 +54,6 @@ $prohibitSetCondition = true;
 $prohibitSetOrder = true;
 $prohibitSetWriteCriticalFields = true;
 //$prohibitIgnoreCondition = true;
-
-/*
- * A random string used in security hashing methods.
- * (Please replace this.)
- */
-$securitySalt = 'a570ced0cb07d7e5160836694f3f2548c14cd4c5';
 
 /*
  * Command to generate the following RSA key:

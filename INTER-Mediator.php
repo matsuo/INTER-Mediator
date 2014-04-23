@@ -54,19 +54,23 @@ function IM_Entry($datasource, $options, $dbspecification, $debug = false)
     global $g_dbInstance, $g_serverSideCall;
     spl_autoload_register('loadClass');
 
+    $requireAuth = false;
+
     // check required PHP extensions
     $requiredFunctions = array(
         'mbstring' => 'mb_internal_encoding',
     );
     if (isset($options) && is_array($options)) {
         foreach ($options as $key => $option) {
-            if ($key == 'authentication'
-                && isset($option['user'])
-                && is_array($option['user'])
-                && array_search('database_native', $option['user']) !== false) {
-                // Native Authentication requires BC Math functions
-                $requiredFunctions = array_merge($requiredFunctions, array('bcmath' => 'bcadd'));
-                break;
+            if ($key == 'authentication') {
+                $requireAuth = true;
+                if (isset($option['user'])
+                    && is_array($option['user'])
+                    && array_search('database_native', $option['user']) !== false) {
+                    // Native Authentication requires BC Math functions
+                    $requiredFunctions = array_merge($requiredFunctions, array('bcmath' => 'bcadd'));
+                    break;
+                }
             }
         }
     }
@@ -95,6 +99,7 @@ function IM_Entry($datasource, $options, $dbspecification, $debug = false)
         $dbInstance->initialize($datasource, $options, $dbspecification, $debug);
         $dbInstance->processingRequest($options, 'NON');
         $g_dbInstance = $dbInstance;
+        
         $authResult = false;
         $redirect = false;
 
@@ -107,56 +112,47 @@ function IM_Entry($datasource, $options, $dbspecification, $debug = false)
             include($currentDirParam);
         }
 
-        if (isset($_COOKIE) && isset($_COOKIE['_im_credential']) && !empty($_COOKIE['_im_credential'])) {
-            $credential = isset($_COOKIE['_im_credential']) ? $_COOKIE['_im_credential'] : '';
-            $username = isset($_COOKIE['_im_username']) ? $_COOKIE['_im_username'] : '';
-            
-            $clientId = isset($securitySalt) ? $securitySalt : $this->generateClientId('');
+        if ($requireAuth) {
+            $clientId = $dbInstance->generateSalt();
+            $username = '';
+            $credential = '';
             $challenge = $dbInstance->generateChallenge();
-            $dbInstance->saveChallenge($username, $challenge, $clientId);
-
+            if (isset($_POST) && isset($_POST['_im_username'])) {
+                $username = isset($_POST['_im_username']) ? $_POST['_im_username'] : '';
+                $password = isset($_POST['_im_password']) ? $_POST['_im_password'] : '';
+                $uid = $dbInstance->dbClass->authSupportGetUserIdFromUsername($username);
+                $retrievedHexSalt = $dbInstance->authSupportGetSalt($username);
+                $retrievedSalt = pack('N', hexdec($retrievedHexSalt));
+                $dbInstance->saveChallenge($username, $challenge, $clientId);
+                $credential = sha1($password . $retrievedSalt) . bin2hex($retrievedSalt);
+                $redirect = true;
+            } else if (isset($_COOKIE) && isset($_COOKIE['_im_credential']) && !empty($_COOKIE['_im_credential'])) {
+                $credential = isset($_COOKIE['_im_credential']) ? $_COOKIE['_im_credential'] : '';
+                $username = isset($_COOKIE['_im_username']) ? $_COOKIE['_im_username'] : '';
+                $dbInstance->saveChallenge($username, $challenge, $clientId);
+            }
             $calcuratedHash = hash_hmac('sha256', $credential, $challenge);
-
             $authResult = $dbInstance->checkAuthorization($username, $calcuratedHash, $clientId);
-        } else if (isset($_POST) && isset($_POST['_im_username'])) {
-            $clientId = isset($_POST['clientid']) ? $_POST['clientid'] :
-                (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'Non-browser-client');
-            $username = isset($_POST['_im_username']) ? $_POST['_im_username'] : '';
-            $password = isset($_POST['_im_password']) ? $_POST['_im_password'] : '';
-            $uid = $dbInstance->dbClass->authSupportGetUserIdFromUsername($username);
-            
-            $retrievedHexSalt = $dbInstance->authSupportGetSalt($username);
-            $retrievedSalt = pack('N', hexdec($retrievedHexSalt));
-            
-            $clientId = isset($securitySalt) ? $securitySalt : $this->generateClientId('');
-            $challenge = $dbInstance->generateChallenge();
-            $dbInstance->saveChallenge($username, $challenge, $clientId);
-            
-            $hashedvalue = sha1($password . $retrievedSalt) . bin2hex($retrievedSalt);
-            $calcuratedHash = hash_hmac('sha256', $hashedvalue, $challenge);
-            
-            $authResult = $dbInstance->checkAuthorization($username, $calcuratedHash, $clientId);
-            $redirect = true;
-        }
-        if ($authResult) {
-            if ($redirect) {
-                $scheme = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://";
-                $port = '';
-                if (($scheme == "http://" && $_SERVER['SERVER_PORT'] != 80) || ($scheme == "https://" && $_SERVER['SERVER_PORT'] != 443)) {
-                    $port = ':' . $_SERVER['SERVER_PORT'];
+            if ($authResult) {
+                if ($redirect) {
+                    $scheme = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://";
+                    $port = '';
+                    if (($scheme == "http://" && $_SERVER['SERVER_PORT'] != 80) || ($scheme == "https://" && $_SERVER['SERVER_PORT'] != 443)) {
+                        $port = ':' . $_SERVER['SERVER_PORT'];
+                    }
+                    $url = $scheme . $_SERVER['SERVER_NAME'] . $port . $_SERVER['REQUEST_URI'];
+                    header("Location: {$url}");
                 }
-                $url = $scheme . $_SERVER['SERVER_NAME'] . $port . $_SERVER['REQUEST_URI'];
-                header("Location: {$url}");
+                if (isset($_POST)) {
+                    setcookie('_im_username', $username);
+                    setcookie('_im_credential', $credential);
+                }
+            } else {
+                $imlib = new INTERMediator_Lib();
+                $html = $imlib->getLoginPage();
+                echo $html;
+                die;
             }
-            if (isset($hashedvalue)) {
-                setcookie('_im_username', $username);
-                setcookie('_im_credential', $hashedvalue);
-            }
-        } else {
-            $imlib = new INTERMediator_Lib();
-            $html = $imlib->getLoginPage();
-            echo $html;
-            die;
         }
     } else if (!isset($_POST['access']) && isset($_GET['uploadprocess'])) {
         $fileUploader = new FileUploader();
