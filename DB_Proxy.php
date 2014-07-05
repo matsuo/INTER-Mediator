@@ -1,17 +1,19 @@
 <?php
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- * 
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2014 Masayuki Nii, All rights reserved.
- * 
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2010-2013 Masayuki Nii, All rights reserved.
+ *
  *   This project started at the end of 2009.
  *   INTER-Mediator is supplied under MIT License.
  */
 
-require_once(dirname(__FILE__) . '/INTERMediator_Lib.php');
-
 /**
- * Class DB_Proxy
+ * Created by JetBrains PhpStorm.
+ * User: msyk
+ * Date: 12/05/05
+ * Time: 20:24
+ * To change this template use File | Settings | File Templates.
  */
 class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
 {
@@ -105,14 +107,14 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
                 $this->logger->setDebugMessage("The method 'doAfterSetToDB' of the class '{$className}' is calling.", 2);
                 $result = $this->userExpanded->doAfterGetFromDB($dataSourceName, $result);
             }
-            if (isset($currentDataSource['send-mail']['load']))   {
+            if (isset($currentDataSource['send-mail']['load'])) {
                 $this->logger->setDebugMessage("Try to send an email.", 2);
                 $mailSender = new SendMail();
                 $mailResult = $mailSender->processing(
                     $currentDataSource['send-mail']['load'],
                     $result,
                     $this->dbSettings->getSmtpConfiguration());
-                if ($mailResult !== true)   {
+                if ($mailResult !== true) {
                     $this->logger->setErrorMessage("Mail sending error: $mailResult");
                 }
             }
@@ -150,7 +152,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
                 $this->userExpanded->doBeforeSetToDB($dataSourceName);
             }
             if ($this->dbClass !== null) {
-                if (isset($currentDataSource['send-mail']['edit']))   {
+                if (isset($currentDataSource['send-mail']['edit'])) {
                     $this->dbClass->requireUpdatedRecord(true);
                 }
                 $result = $this->dbClass->setToDB($dataSourceName);
@@ -158,14 +160,14 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
             if ($this->userExpanded !== null && method_exists($this->userExpanded, "doAfterSetToDB")) {
                 $result = $this->userExpanded->doAfterSetToDB($dataSourceName, $result);
             }
-            if (isset($currentDataSource['send-mail']['edit']))   {
+            if (isset($currentDataSource['send-mail']['edit'])) {
                 $this->logger->setDebugMessage("Try to send an email.", 2);
                 $mailSender = new SendMail();
                 $mailResult = $mailSender->processing(
                     $currentDataSource['send-mail']['edit'],
                     $this->dbClass->updatedRecord(),
                     $this->dbSettings->getSmtpConfiguration());
-                if ($mailResult !== true)   {
+                if ($mailResult !== true) {
                     $this->logger->setErrorMessage("Mail sending error: $mailResult");
                 }
             }
@@ -189,7 +191,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
                 $this->userExpanded->doBeforeNewToDB($dataSourceName);
             }
             if ($this->dbClass !== null) {
-                if (isset($currentDataSource['send-mail']['new']))   {
+                if (isset($currentDataSource['send-mail']['new'])) {
                     $this->dbClass->requireUpdatedRecord(true);
                 }
                 $result = $this->dbClass->newToDB($dataSourceName, $bypassAuth);
@@ -197,14 +199,14 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
             if ($this->userExpanded !== null && method_exists($this->userExpanded, "doAfterNewToDB")) {
                 $result = $this->userExpanded->doAfterNewToDB($dataSourceName, $result);
             }
-            if (isset($currentDataSource['send-mail']['new']))   {
+            if (isset($currentDataSource['send-mail']['new'])) {
                 $this->logger->setDebugMessage("Try to send an email.");
                 $mailSender = new SendMail();
                 $mailResult = $mailSender->processing(
                     $currentDataSource['send-mail']['new'],
                     $this->dbClass->updatedRecord(),
                     $this->dbSettings->getSmtpConfiguration());
-                if ($mailResult !== true)   {
+                if ($mailResult !== true) {
                     $this->logger->setErrorMessage("Mail sending error: $mailResult");
                 }
             }
@@ -466,9 +468,6 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         $generatedPrivateKey = '';
         $passPhrase = '';
 
-        /*
-         * Decide the params.php file and load it.
-         */
         $currentDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
         $currentDirParam = $currentDir . 'params.php';
         $parentDirParam = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'params.php';
@@ -477,9 +476,26 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         } else if (file_exists($currentDirParam)) {
             include($currentDirParam);
         }
-        
-        $imlib = new INTERMediator_Lib();
-        $messageClass = $imlib->loadMessageClass();
+
+        $messageClass = null;
+        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+            $clientLangArray = explode(',', $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+            foreach ($clientLangArray as $oneLanguage) {
+                $langCountry = explode(';', $oneLanguage);
+                if (strlen($langCountry[0]) > 0) {
+                    $clientLang = explode('-', $langCountry[0]);
+                    $messageClass = "MessageStrings_$clientLang[0]";
+                    if (file_exists("{$currentDir}{$messageClass}.php")) {
+                        $messageClass = new $messageClass();
+                        break;
+                    }
+                }
+                $messageClass = null;
+            }
+        }
+        if ($messageClass == null) {
+            $messageClass = new MessageStrings();
+        }
 
         $tableInfo = $this->dbSettings->getDataSourceTargetArray();
         $access = is_null($access) ? $_POST['access'] : $access;
@@ -488,7 +504,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         $this->paramAuthUser = isset($_POST['authuser']) ? $_POST['authuser'] : "";
         $paramResponse = isset($_POST['response']) ? $_POST['response'] : "";
 
-        if (isset($options['smtp']))    {
+        if (isset($options['smtp'])) {
             $this->dbSettings->setSmtpConfiguration($options['smtp']);
         }
 
@@ -661,7 +677,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
                     $this->outputOfProcessing['changePasswordResult'] = ($changeResult ? true : false);
                 } else {
 //                    $this->outputOfProcessing = "changePasswordResult=false;";
-                    $this->outputOfProcessing['changePasswordResult']=false;
+                    $this->outputOfProcessing['changePasswordResult'] = false;
                 }
                 break;
         }
@@ -673,7 +689,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
             $fInfo = $this->getFieldInfo($this->dbSettings->getTargetName());
             if ($fInfo != null) {
                 foreach ($this->dbSettings->getFieldsRequired() as $fieldName) {
-                    if (!in_array($fieldName, $fInfo)) {
+                    if (! $this->dbClass->isContainingFieldName($fieldName, $fInfo)) {
                         $this->logger->setErrorMessage($messageClass->getMessageAs(1033, array($fieldName)));
                     }
                 }
@@ -692,6 +708,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         if ($notFinish || !$this->dbSettings->getRequireAuthorization()) {
             $this->outputOfProcessing['errorMessages'] = $this->logger->getErrorMessages();
             $this->outputOfProcessing['debugMessages'] = $this->logger->getDebugMessages();
+            $this->outputOfProcessing['usenull'] = $this->dbClass->isNullAcceptable();
             return;
         }
         $generatedChallenge = $this->generateChallenge();
@@ -706,6 +723,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         $this->outputOfProcessing['debugMessages'] = $this->logger->getDebugMessages();
         $this->outputOfProcessing['challenge'] = "{$generatedChallenge}{$userSalt}";
         $this->outputOfProcessing['clientid'] = $generatedUID;
+        $this->outputOfProcessing['usenull'] = $this->dbClass->isNullAcceptable();
         if ($this->dbSettings->getRequireAuthentication()) {
             $this->outputOfProcessing['requireAuth'] = true;
         }
@@ -968,4 +986,13 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
     {
         // TODO: Implement isPossibleOrderSpecifier() method.
     }
+
+    public function isContainingFieldName($fname, $fieldnames)    {
+        return null;
+    }
+
+    public function isNullAcceptable()  {
+        return true;
+    }
+
 }

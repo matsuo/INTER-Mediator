@@ -42,8 +42,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($result) == 1, "After the query, just one should be retrieved.");
         $this->assertTrue($recordCount == 3, "This table contanins 3 records");
         $this->assertTrue($result[0]["id"] == 1, "Field value is not same as the definition.");
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     public function testQuery2_multipleRecord()
@@ -56,12 +56,20 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $this->assertTrue($result[2]["name"] === 'Anyone', "Field value is not same as the definition.");
         $this->assertTrue($result[2]["id"] == 3, "Field value is not same as the definition.");
 
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     public function testInsertAndUpdateRecord()
     {
+        $this->dbProxySetupForAccess("contact", 1000000);
+        $this->db_proxy->requireUpdatedRecord(true);
+        $newKeyValue = $this->db_proxy->newToDB("contact", true);
+        $this->assertTrue($newKeyValue > 0, "If a record was created, it returns the new primary key value.");
+        $createdRecord = $this->db_proxy->updatedRecord();
+        $this->assertTrue($createdRecord != null, "Created record should be exists.");
+        $this->assertTrue(count($createdRecord) == 1, "It should be just one record.");
+
         $this->dbProxySetupForAccess("person", 1000000);
         $this->db_proxy->requireUpdatedRecord(true);
         $newKeyValue = $this->db_proxy->newToDB("person", true);
@@ -94,8 +102,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $this->assertTrue($result[0]["name"] === $nameValue, "Field value is not same as the definition.");
         $this->assertTrue($result[0]["address"] === $addressValue, "Field value is not same as the definition.");
 
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
 
     }
 
@@ -122,8 +130,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         echo var_export($this->db_proxy->logger->getDebugMessage(), true);
         $this->assertEquals($expectedPasswd, $retrievedPasswd, $testName);
 
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     public function testAuthUser3()
@@ -135,8 +143,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $retrievedSalt = $this->db_proxy->authSupportGetSalt($username);
         $this->assertEquals('54455354', $retrievedSalt, $testName);
 
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     public function testAuthUser4()
@@ -158,8 +166,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $this->db_proxy->dbClass->authSupportStoreChallenge($username, $challenge, "TEST");
         $this->assertEquals($challenge, $this->db_proxy->dbClass->authSupportRetrieveChallenge($username, "TEST"), $testName);
 
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
 
     }
 
@@ -184,8 +192,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $this->db_proxy->checkAuthorization($username, $calcuratedHash, "TEST"), $testName);
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     public function testAuthUser6()
@@ -214,8 +222,8 @@ abstract class DB_PDO_Test_Common extends PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->db_proxy->checkAuthorization($username, hash_hmac('sha256', $hashedvalue, $challenge), $clientId),
             $testName);
-        var_export($this->db_proxy->logger->getAllErrorMessages());
-        var_export($this->db_proxy->logger->getDebugMessage());
+//        var_export($this->db_proxy->logger->getAllErrorMessages());
+//        var_export($this->db_proxy->logger->getDebugMessage());
     }
 
     function testUserGroup()

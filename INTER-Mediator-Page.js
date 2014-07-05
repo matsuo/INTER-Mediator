@@ -53,6 +53,9 @@ INTERMediatorOnPage = {
     isSetDefaultStyle: true,
     authPanelTitle: null,
 
+    additionalExpandingEnclosureFinish: {},
+    additionalExpandingRecordFinish: {},
+
     /*
      This method "getMessages" is going to be replaced valid one with the browser's language.
      Here is defined to prevent the warning of static check.
@@ -129,25 +132,38 @@ INTERMediatorOnPage = {
         this.authUserSalt = "";
         this.authChallenge = "";
         this.clientId = "";
-        this.removeCookie('_im_username');
-        this.removeCookie('_im_credential');
-        this.removeCookie('_im_mediatoken');
+        this.removeCookie("_im_username");
+        this.removeCookie("_im_credential");
+        this.removeCookie("_im_mediatoken");
+        if (INTERMediator.useSessionStorage === true && typeof sessionStorage !== 'undefined' && sessionStorage !== null) {
+            sessionStorage.removeItem("_im_localcontext");
+        } else {
+            this.removeCookie("_im_localcontext");
+        }
     },
 
     storeCredencialsToCookie: function () {
         switch (INTERMediatorOnPage.authStoring) {
             case 'cookie':
-                INTERMediatorOnPage.setCookie('_im_username', INTERMediatorOnPage.authUser);
-                INTERMediatorOnPage.setCookie('_im_credential', INTERMediatorOnPage.authHashedPassword);
+                if (INTERMediatorOnPage.authUser) {
+                    INTERMediatorOnPage.setCookie("_im_username", INTERMediatorOnPage.authUser);
+                }
+                if (INTERMediatorOnPage.authHashedPassword) {
+                    INTERMediatorOnPage.setCookie("_im_credential", INTERMediatorOnPage.authHashedPassword);
+                }
                 if (INTERMediatorOnPage.mediaToken) {
-                    INTERMediatorOnPage.setCookie('_im_mediatoken', INTERMediatorOnPage.mediaToken);
+                    INTERMediatorOnPage.setCookie("_im_mediatoken", INTERMediatorOnPage.mediaToken);
                 }
                 break;
             case 'cookie-domainwide':
-                INTERMediatorOnPage.setCookieDomainWide('_im_username', INTERMediatorOnPage.authUser);
-                INTERMediatorOnPage.setCookieDomainWide('_im_credential', INTERMediatorOnPage.authHashedPassword);
+                if (INTERMediatorOnPage.authUser) {
+                    INTERMediatorOnPage.setCookieDomainWide("_im_username", INTERMediatorOnPage.authUser);
+                }
+                if (INTERMediatorOnPage.authHashedPassword) {
+                    INTERMediatorOnPage.setCookieDomainWide("_im_credential", INTERMediatorOnPage.authHashedPassword);
+                }
                 if (INTERMediatorOnPage.mediaToken) {
-                    INTERMediatorOnPage.setCookieDomainWide('_im_mediatoken', INTERMediatorOnPage.mediaToken);
+                    INTERMediatorOnPage.setCookieDomainWide("_im_mediatoken", INTERMediatorOnPage.mediaToken);
                 }
                 break;
         }
@@ -676,11 +692,11 @@ INTERMediatorOnPage = {
     setCookieWorker: function (key, val, isDomain, expired) {
         var cookieString;
         var d = new Date();
-        d.setTime(d.getTime() + INTERMediatorOnPage.authExpired * 1000);
-        cookieString = key + "=" + encodeURIComponent(val)
-            + ( isDomain ? ";path=/" : "" )
-            + ";max-age=" + expired
-            + ";expires=" + d.toGMTString() + ';';
+        d.setTime(d.getTime() + expired * 1000);
+        cookieString = key + "=" + encodeURIComponent(val) + ( isDomain ? ";path=/" : "" ) + ";";
+        if (expired > 0) {
+           cookieString += "max-age=" + expired + ";expires=" + d.toGMTString() + ";";
+        }
         if (document.URL.substring(0, 8) == "https://") {
             cookieString += "secure;";
         }

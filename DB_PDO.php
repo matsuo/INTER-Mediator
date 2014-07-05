@@ -139,7 +139,7 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
                         $escapedValue = $this->link->quote($condition['value']);
                         if (isset($condition['operator'])) {
                             if (!$this->isPossibleOperator($condition['operator'])) {
-                                throw new Exception("Invalid Operator.");
+                                throw new Exception("Invalid Operator.: {$condition['operator']}");
                             }
                             $queryClauseArray[$chunkCount][]
                                 = "{$escapedField} {$condition['operator']} {$escapedValue}";
@@ -149,7 +149,7 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
                         }
                     } else {
                         if (!$this->isPossibleOperator($condition['operator'])) {
-                            throw new Exception("Invalid Operator.");
+                            throw new Exception("Invalid Operator.: {$condition['operator']}");
                         }
                         $queryClauseArray[$chunkCount][]
                             = "{$escapedField} {$condition['operator']}";
@@ -192,7 +192,7 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
                         }
                     } else {
                         if (!$this->isPossibleOperator($condition['operator'])) {
-                            throw new Exception("Invalid Operator.");
+                            throw new Exception("Invalid Operator.: {$condition['operator']}");
                         }
                         $queryClauseArray[$chunkCount][]
                             = "{$escapedField} {$condition['operator']}";
@@ -325,7 +325,7 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
                         $this->logger->setDebugMessage($sql);
                         $result = $this->link->query($sql);
                         if ($result === false) {
-                            $this->errorMessageStore('Pre-script:' + $sql);
+                            $this->errorMessageStore('Pre-script:' . $sql);
                         }
                     }
                 }
@@ -354,17 +354,20 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
         $this->mainTableCount = $result->fetchColumn(0);
 
         // Create SQL
-        $limitParam = 10000000;
+        $limitParam = 100000000;
         if ($this->dbSettings->getRecordCount() > 0) {
             $limitParam = $this->dbSettings->getRecordCount();
         }
         if (isset($tableInfo['records'])) {
             $limitParam = $tableInfo['records'];
-            if (isset($tableInfo['maxrecords']) && intval($tableInfo['records']) > intval($tableInfo['maxrecords'])) {
-                $limitParam = $tableInfo['maxrecords'];
-            }
-        } else if (isset($tableInfo['maxrecords'])) {
+        } elseif (isset($tableInfo['maxrecords'])) {
             $limitParam = $tableInfo['maxrecords'];
+        }
+        if (isset($tableInfo['maxrecords'])
+            && intval($tableInfo['maxrecords']) >= $this->dbSettings->getRecordCount()
+            && $this->dbSettings->getRecordCount() > 0
+        ) {
+            $limitParam = $this->dbSettings->getRecordCount();
         }
 
         $skipParam = 0;
@@ -497,7 +500,7 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
 
         $result = $prepSQL->execute($setParameter);
         if ($result === false) {
-            $this->errorMessageStore('Update:' + $prepSQL->erroInfo);
+            $this->errorMessageStore('Update:' . $sql);
             return false;
         }
 
@@ -1613,6 +1616,14 @@ class DB_PDO extends DB_AuthCommon implements DB_Access_Interface
         } else {
             return $fieldName;
         }
+    }
+
+    public function isContainingFieldName($fname, $fieldnames)    {
+        return in_array($fname, $fieldnames);
+    }
+
+    public function isNullAcceptable()  {
+        return true;
     }
 
 }

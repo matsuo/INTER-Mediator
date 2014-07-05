@@ -8,24 +8,49 @@ http://inter-mediator.org/
 Change Log will be supplied by English only.
 Latest changes might exist on the GitHub repository. Please check https://github.com/msyk/INTER-Mediator.
 
-Ver.4.4 (in development)
+Ver.4.5 (in development)
+- Modify setToDB() of DB_PDO.php to avoid outputting error messages in an error log file.
+- [BUG FIX] The JavaScript code editor "codemirror" support plugin was modified. It works fine.
+
+Ver.4.4 (2014/5/22)
+- Multiple elements bound to the same field of the same table can synchronize in a page.
 - Update samples to improve compatibility with CSP (Content Security Policy).
   (except Asset Management, Account Manager and JS Components Sample)
 - Add Client-Side Calculation Page Samples for SQLite and PostgreSQL.
 - Update sample_schema_mysql.txt to merge schema_data.txt of Sample_Extensible Sample.
 - Avoid outputting error messages in an error log file when not specifying the 'context' key of the 'file-upload' 
   key in a definition file.
+- Update the Local Context to improve compatibility with INTERMediator.pagedSize and update the "Practices".
+- INTERMediatorOnPage.additionalExpandingEnclosureFinish and INTERMediatorOnPage.additionalExpandingRecordFinish
+  are supported. These are programmable interfaces associated with 'post-enclosure' and 'post-repeater' in a context.
+- DataConverter_MySQLDateTime class supports 'YYYY.MM.DD' date format.
+- Use sessionStorage for the Local Context instead of Cookie by default.
+- Cookie is now destroyed when browser is closed when the value of 'authexpired' key in a definition file is 0.
+- Divide the pagination codes to INTER-Mediator-Navi.js.
+- Update OME.php to sending to the email address including '+' (especially for Gmail users).
+- Added class IMLibChangeEventDispatch, IMLibMouseEventDispatch, IMLibKeyEventDispatch for dispatching events.
 - [BUG FIX] Fix compatibility when using INTERMediator.additionalCondition or INTERMediator.additionalSortKey.
   The affected version is 4.3 only (Thanks to Kentaro Suzuki).
-- [BUG FIX] Fix an error when the value of 'operator' is 'or' or 'and' in addtionalCondition with FileMaker Server.
+- [BUG FIX] Fix an error when the value of 'operator' is 'or' or 'and' in additionalCondition with FileMaker Server.
   The affected versions are 3.11, 4.0, 4.1, 4.2 and 4.3 (Thanks to Kentaro Suzuki).
 - [BUG FIX] Fix not to show the error message (message id: 1024) when updating data using Safari (version 4.3 only).
 - [BUG FIX] Fix an error in "Master-Detail Style Page" Sample for PostgreSQL (version 4.3 only).
 - [BUG FIX] Fix updating data when uploading a file and specifying the 'field' key and not specifying the 'context' 
   key in the 'file-upload' key of the definition file.
+- [BUG FIX] Avoid an error in getValueFromIMNode() of INTER-Mediator-Lib.js if the parameter is null.
+- [BUG FIX] Fix handling the 'maxrecords' key and INTERMediator.pagedSize.
+- [BUG FIX] The JS program of the Sample_chat has been modified.
 - [BUG FIX] Fix not to show the error message ("currentRecord is null - EXCEPTION-25") when using the PostOnlyContext 
   and the related context is exisiting.
-- [BUG FIX] Fix handling the 'maxrecords' key and the 'records' key of the related context.
+- [BUG FIX] Fix not to show the error message ("curVal.replace is not a function - EXCEPTION-27") in 
+  IMLibElement.setValueToIMNode() if the element of the parameter is a textarea element and the value is false.
+- [BUG FIX] Fix not to show the dialog message when the value of the Local Context is updated.
+- [BUG FIX] Avoid outputting duplicated alert messages of the validation when changing the value.
+- [BUG FIX] Enable outputting an alert message of the validation correctly when the validation rules of the field are 
+  multiple on the post only mode.
+- [BUG FIX] The calculated property didn't work in case of just a constant expression.
+- [BUG FIX] The calculated property's 'field' detection was wrong.
+- [WARNING] The JavaScript code editor "codemirror" isn't temporally supported for the updated version doesn't work fine.
 
 Ver.4.3 (2014/4/7)
 - The Local Context is supported. You can bind the context named "_" at any place in a page file.

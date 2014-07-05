@@ -366,6 +366,9 @@ class DB_Settings
      */
     public function setAuthentication($authentication)
     {
+        if (isset($authentication['authexpired']) && $authentication['authexpired'] == 0) {
+            $authentication['authexpired'] = $this->getAuthenticationItem('authexpired');
+        }
         $this->authentication = $authentication;
     }
 
@@ -532,6 +535,11 @@ class DB_Settings
     function getExtraCriteria()
     {
         return $this->extraCriteria;
+    }
+
+    function unsetExtraCriteria($index)
+    {
+        unset($this->extraCriteria[$index]);
     }
 
     function addExtraCriteria($field, $operator, $value)

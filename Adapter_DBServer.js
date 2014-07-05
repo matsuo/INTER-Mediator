@@ -57,7 +57,9 @@ INTERMediator_DBAdapter = {
                 + "Accessing:" + decodeURI(appPath) + ", Parameters:" + decodeURI(accessURL + authParams));
     },
 
-    logging_comResult: function (myRequest, resultCount, dbresult, requireAuth, challenge, clientid, newRecordKeyValue, changePasswordResult, mediatoken) {
+    logging_comResult: function (
+        myRequest, resultCount, dbresult, requireAuth, challenge,
+        clientid, newRecordKeyValue, changePasswordResult, mediatoken) {
         var responseTextTrancated;
         if (INTERMediator.debugMode > 1) {
             if (myRequest.responseText.length > 1000) {
@@ -103,6 +105,7 @@ INTERMediator_DBAdapter = {
             for (i = 0 ; i < jsonObject.debugMessages.length; i++) {
                 INTERMediator.setDebugMessage(jsonObject.debugMessages[i]);
             }
+            INTERMediator.nullAcceptable = jsonObject.usenull;
 
             INTERMediator_DBAdapter.logging_comResult(myRequest, resultCount, dbresult, requireAuth,
                 challenge, clientid, newRecordKeyValue, changePasswordResult, mediatoken);
@@ -247,7 +250,7 @@ INTERMediator_DBAdapter = {
                         }
                         INTERMediatorOnPage.authCount = 0;
                         INTERMediatorOnPage.storeCredencialsToCookie();
-                        doItOnFinish();
+                        doItOnFinish(dbresult);
                         break;
                 }
             }
@@ -270,6 +273,7 @@ INTERMediator_DBAdapter = {
      parentkeyvalue:<the value of foreign key field, could be null>
      conditions:<the array of the object {field:xx,operator:xx,value:xx} to search records, could be null>
      useoffset:<true/false whether the offset parameter is set on the query.>
+     uselimit:<true/false whether the limit parameter is set on the query.>
      primaryKeyOnly: true/false
      }
 
@@ -279,7 +283,7 @@ INTERMediator_DBAdapter = {
         var noError = true, i, index, params, counter, extCount, criteriaObject, sortkeyObject,
             returnValue, result, ix;
 
-        if (args['name'] == null) {
+        if (args.name === null || args.name === "") {
             INTERMediator.setErrorMessage(INTERMediatorLib.getInsertedStringFromErrorNumber(1005));
             noError = false;
         }
@@ -290,12 +294,12 @@ INTERMediator_DBAdapter = {
         if (args['records'] == null) {
             params = "access=select&name=" + encodeURIComponent(args['name']) + "&records=10000000";
         } else {
-            if (args['records'] == 0) {
+            if (Number(args.records) === 0) {
                 params = "access=describe&name=" + encodeURIComponent(args['name']);
             } else {
                 params = "access=select&name=" + encodeURIComponent(args['name']);
             }
-            if (args['records'] >= INTERMediator.pagedSize && INTERMediator.pagedSize > 0) {
+            if (args['uselimit'] === true && Number(args.records) >= INTERMediator.pagedSize && Number(INTERMediator.pagedSize) > 0) {
                 params += "&records=" + encodeURIComponent(INTERMediator.pagedSize);
             } else {
                 params += "&records=" + encodeURIComponent(args['records']);
@@ -329,9 +333,12 @@ INTERMediator_DBAdapter = {
         }
         extCount = 0;
         while (args['conditions'] && args['conditions'][extCount]) {
-            params += "&condition" + extCount + "field=" + encodeURIComponent(args['conditions'][extCount]['field']);
-            params += "&condition" + extCount + "operator=" + encodeURIComponent(args['conditions'][extCount]['operator']);
-            params += "&condition" + extCount + "value=" + encodeURIComponent(args['conditions'][extCount]['value']);
+            params += "&condition" + extCount;
+            params += "field=" + encodeURIComponent(args['conditions'][extCount]['field']);
+            params += "&condition" + extCount;
+            params += "operator=" + encodeURIComponent(args['conditions'][extCount]['operator']);
+            params += "&condition" + extCount;
+            params += "value=" + encodeURIComponent(args['conditions'][extCount]['value']);
             extCount++;
         }
         criteriaObject = INTERMediator.additionalCondition[args['name']];
@@ -340,15 +347,20 @@ INTERMediator_DBAdapter = {
                 criteriaObject = [criteriaObject];
             }
             for (index = 0; index < criteriaObject.length; index++) {
-                if (criteriaObject.hasOwnProperty(index)) {
-                    params += "&condition" + extCount + "field=" + encodeURIComponent(criteriaObject[index]["field"]);
-                    if (criteriaObject[index]["operator"] !== undefined) {
-                        params += "&condition" + extCount + "operator=" + encodeURIComponent(criteriaObject[index]["operator"]);
+                if (criteriaObject[index] && criteriaObject[index]["field"]) {
+                    if (criteriaObject[index]["value"] || criteriaObject[index]["field"] == "__operation__") {
+                        params += "&condition" + extCount;
+                        params += "field=" + encodeURIComponent(criteriaObject[index]["field"]);
+                        if (criteriaObject[index]["operator"] !== undefined) {
+                            params += "&condition" + extCount;
+                            params += "operator=" + encodeURIComponent(criteriaObject[index]["operator"]);
+                        }
+                        if (criteriaObject[index]["value"] !== undefined) {
+                            params += "&condition" + extCount;
+                            params += "value=" + encodeURIComponent(criteriaObject[index]["value"]);
+                        }
+                        extCount++;
                     }
-                    if (criteriaObject[index]["value"] !== undefined) {
-                        params += "&condition" + extCount + "value=" + encodeURIComponent(criteriaObject[index]["value"]);
-                    }
-                    extCount++;
                 }
 
             }
@@ -361,8 +373,10 @@ INTERMediator_DBAdapter = {
                 sortkeyObject = [sortkeyObject];
             }
             for (index = 0; index < sortkeyObject.length; index++) {
-                params += "&sortkey" + extCount + "field=" + encodeURIComponent(sortkeyObject[index]["field"]);
-                params += "&sortkey" + extCount + "direction=" + encodeURIComponent(sortkeyObject[index]["direction"]);
+                params += "&sortkey" + extCount;
+                params += "field=" + encodeURIComponent(sortkeyObject[index]["field"]);
+                params += "&sortkey" + extCount;
+                params += "direction=" + encodeURIComponent(sortkeyObject[index]["direction"]);
                 extCount++;
             }
 
@@ -380,10 +394,11 @@ INTERMediator_DBAdapter = {
                 returnValue.count++;
             }
             if (( args['paging'] != null) && ( args['paging'] == true )) {
-                if (!(args['records'] >= INTERMediator.pagedSize && INTERMediator.pagedSize > 0)) {
-                    INTERMediator.pagedSize = args['records'];
+                if (!(Number(args['records']) >= Number(INTERMediator.pagedSize)
+                    && Number(INTERMediator.pagedSize) > 0)) {
+                    INTERMediator.pagedSize = Number(args['records']);
                 }
-                INTERMediator.pagedAllCount = result.resultCount;
+                INTERMediator.pagedAllCount = Number(result.resultCount);
             }
         } catch (ex) {
             if (ex == "_im_requath_request_") {
