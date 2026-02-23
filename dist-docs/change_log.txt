@@ -36,6 +36,7 @@ Ver.15 (in Development)
 - If the property INTERMediatorOnPage.justMoveToDetail set to true, in case of Master/Detail navigating page, just a
   detail area is going to update after a field is edited.
 - The property 'no-default-values-on-copy' can suppress default values on copying records.
+- The property IMLibAuthenticationUI.doAfterLoginPanel was retired. Its callback didn't work correctly.
 - [Bug Fix]On version 12, INTERMediator.clearCondition method clears page number of pagination in any case.
   INTERMediator.clearCondition should be cleared any parameter, just clears all conditions.
 - [SECURITY ISSUES] The account manager of sample code can be accessed on same case. So the samples are moved to

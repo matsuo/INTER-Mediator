@@ -3362,16 +3362,16 @@
         },
         {
             "name": "spatie/dropbox-api",
-            "version": "1.23.0",
+            "version": "1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/dropbox-api.git",
-                "reference": "120ff475d7b03d3700a884c295b3b9503c4ddf8d"
+                "reference": "22f80410699d1bc83dbc19b0fe5b15b83e0a3e00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/dropbox-api/zipball/120ff475d7b03d3700a884c295b3b9503c4ddf8d",
-                "reference": "120ff475d7b03d3700a884c295b3b9503c4ddf8d",
+                "url": "https://api.github.com/repos/spatie/dropbox-api/zipball/22f80410699d1bc83dbc19b0fe5b15b83e0a3e00",
+                "reference": "22f80410699d1bc83dbc19b0fe5b15b83e0a3e00",
                 "shasum": ""
             },
             "require": {
@@ -3382,7 +3382,7 @@
             },
             "require-dev": {
                 "laravel/pint": "^1.10.1",
-                "pestphp/pest": "^2.6.3",
+                "pestphp/pest": "^4.0",
                 "phpstan/phpstan": "^1.10.16"
             },
             "type": "library",
@@ -3420,7 +3420,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/dropbox-api/issues",
-                "source": "https://github.com/spatie/dropbox-api/tree/1.23.0"
+                "source": "https://github.com/spatie/dropbox-api/tree/1.24.0"
             },
             "funding": [
                 {
@@ -3432,7 +3432,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-06T09:31:59+00:00"
+            "time": "2026-02-22T08:53:25+00:00"
         },
         {
             "name": "spomky-labs/aes-key-wrap",
