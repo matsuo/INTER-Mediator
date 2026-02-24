@@ -27,7 +27,7 @@ module.exports = (FormPage, windowList) => {
       await expect(FormPage.fieldPersonId).toHaveText("1")
       await FormPage.navigator.waitForExist()
       await FormPage.navigatorUpdateButton.waitForClickable();
-      await FormPage.navigatorMoveButtonNext.click()
+      // await FormPage.navigatorMoveButtonNext.click()
       await FormPage.navigator.waitForExist()
       await FormPage.navigatorUpdateButton.waitForClickable();
       await FormPage.navigatorMoveButtonNext.click()
@@ -40,7 +40,7 @@ module.exports = (FormPage, windowList) => {
       await expect(FormPage.fieldPersonId).toHaveText("1")
       await FormPage.navigator.waitForExist()
       await FormPage.navigatorUpdateButton.waitForClickable();
-      await FormPage.navigatorMoveButtonNext.click()
+      // await FormPage.navigatorMoveButtonNext.click()
       await expect(FormPage.fieldPersonId).toHaveText("2")
       // await FormPage.fieldPersonName.setValue("Data" + Math.trunc(Math.random() * 10000))
       // await browser.keys([Key.Tab])

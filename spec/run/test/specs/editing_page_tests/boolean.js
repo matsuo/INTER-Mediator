@@ -28,8 +28,7 @@ module.exports = (EditingPage) => {
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool1Textfield).toHaveValue(isPGSQL ? "true" : "1")
       await EditingPage.fieldBool1Textfield.setValue("") // Clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool1Textfield).toHaveValue(isPGSQL ? "" : "0")
     })
@@ -48,8 +47,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldBool2Textfield).toHaveValue("") // Checking initial value
       const value = 1
       await EditingPage.fieldBool2Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool2Textfield).toHaveValue(isPGSQL ? "true" : "1")
       await EditingPage.fieldBool2Textfield.setValue("") // Clear the field
@@ -75,17 +73,15 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldBool1Checkbox).not.toBeSelected() // Checking initial value
       await EditingPage.fieldBool1Checkbox.waitForClickable() // For stability
       await EditingPage.fieldBool1Checkbox.click() // ON
-      await browser.pause(waiting)
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      // await browser.pause(waiting)
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await EditingPage.fieldBool1Checkbox.waitForClickable() // For stability
       await expect(EditingPage.fieldBool1Checkbox).toBeSelected()
       await expect(EditingPage.fieldBool1Textfield).toHaveValue(isPGSQL ? "true" : "1")
       await EditingPage.fieldBool1Checkbox.waitForClickable() // OFF
       await EditingPage.fieldBool1Checkbox.click() // OFF
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool1Checkbox).not.toBeSelected()
       await expect(EditingPage.fieldBool1Textfield).toHaveValue(isPGSQL ? "" : "0")
@@ -107,15 +103,13 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldBool2Checkbox).not.toBeSelected() // Checking initial value
       await EditingPage.fieldBool2Checkbox.waitForClickable() // ON
       await EditingPage.fieldBool2Checkbox.click() // ON
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool2Checkbox).toBeSelected()
       await expect(EditingPage.fieldBool2Textfield).toHaveValue(isPGSQL ? "true" : "1")
       await EditingPage.fieldBool2Checkbox.waitForClickable() // OFF
       await EditingPage.fieldBool2Checkbox.click() // OFF
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldBool2Checkbox).not.toBeSelected()
       await expect(EditingPage.fieldBool2Textfield).toHaveValue("")

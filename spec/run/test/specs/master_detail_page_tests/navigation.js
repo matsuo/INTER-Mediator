@@ -3,11 +3,13 @@ module.exports = (mdPage) => {
 
   describe('Master-Detail Page', () => {
     it('1-can show the Master area, and disappear the Detail area.', async () => {
+      browser.refresh() // For stability
+      await mdPage.navigatorUpdateButton.waitForClickable() // For stability
+      browser.pause(waiting) // For stability
       await expect(mdPage.navigator).toExist()
       expect(await mdPage.getNavigatorStyleDisplay()).not.toBe('none')
       await expect(mdPage.masterTable).toExist()
       expect(await mdPage.getMasterTableStyleDisplay()).not.toBe('none')
-      browser.pause(waiting)
       await expect(mdPage.detailTable).toExist()
       expect(await mdPage.getDetailTableStyleDisplay()).toBe('none')
     });

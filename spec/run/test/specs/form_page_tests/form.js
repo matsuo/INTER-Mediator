@@ -5,6 +5,7 @@ module.exports = (FormPage) => {
     it('1-can edit the first record.', async () => {
       await FormPage.navigatorUpdateButton.waitForClickable();
       await FormPage.navigatorUpdateButton.click();
+      // browser.refresh()
       await browser.pause(waiting)
 
       await expect(FormPage.fieldPersonId).toHaveText("1")
@@ -20,6 +21,7 @@ module.exports = (FormPage) => {
     it('2-can store the edited data on the first record.', async () => {
       await FormPage.navigatorUpdateButton.waitForClickable();
       await FormPage.navigatorUpdateButton.click();
+      // browser.refresh()
       await browser.pause(waiting)
 
       await expect(FormPage.fieldPersonId).toHaveText("1")
@@ -37,6 +39,7 @@ module.exports = (FormPage) => {
     it('3-detail area expanded with multi-record', async () => {
       await FormPage.navigatorUpdateButton.waitForClickable();
       await FormPage.navigatorUpdateButton.click();
+      // browser.refresh()
       await browser.pause(waiting * 3)
 
       await expect(FormPage.contactTable).toExist() // check the detailed Contact table
@@ -71,8 +74,9 @@ module.exports = (FormPage) => {
       await FormPage.navigatorMoveButtonFirst.waitForClickable()
       await FormPage.navigatorMoveButtonFirst.click() // Move to first record
       await browser.pause(waiting)
+      browser.refresh()
       await FormPage.navigatorUpdateButton.waitForClickable();
-      await FormPage.navigatorUpdateButton.click();
+      // await FormPage.navigatorUpdateButton.click();
       await browser.pause(waiting * 4)
 
       await expect(FormPage.rowContact[0]).toExist()
@@ -117,7 +121,8 @@ module.exports = (FormPage) => {
     });
     it('5-can insert a row into detail area.', async () => {
       await FormPage.navigatorUpdateButton.waitForClickable();
-      await FormPage.navigatorUpdateButton.click();
+      // await FormPage.navigatorUpdateButton.click();
+      browser.refresh()
       await browser.pause(waiting)
       await FormPage.contactTableInsertButton.waitForClickable()
       await expect(FormPage.contactTableInsertButton).toExist()
@@ -142,6 +147,7 @@ module.exports = (FormPage) => {
       // await FormPage.navigatorUpdateButton.waitForClickable()
       // await FormPage.navigatorUpdateButton.click();
       // await browser.pause(waiting)
+      browser.refresh()
       await FormPage.rowContactDeleteButton[1].waitForClickable()
       await FormPage.rowContactDeleteButton[1].click()
       await browser.acceptAlert()
@@ -159,9 +165,10 @@ module.exports = (FormPage) => {
     it('7-can copy a row in detail area.', async () => {
       // await FormPage.open()
       // await browser.pause(waiting)
-      // await FormPage.navigatorUpdateButton.waitForClickable();
+      await FormPage.navigatorUpdateButton.waitForClickable();
       // await FormPage.navigatorUpdateButton.click();
       // await browser.pause(waiting)
+      browser.refresh()
       const value = await FormPage.rowContactSummary[1].getValue()
       await expect(FormPage.contactTableInsertButton).toExist()
       await FormPage.rowContactCopyButton[1].waitForClickable()

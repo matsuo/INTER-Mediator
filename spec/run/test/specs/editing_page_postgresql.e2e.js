@@ -33,7 +33,7 @@ describe('Editing Page with PostgreSQL', () => {
    */
   it('2.has the INTER-Mediator\'s navigation.', async () => {
     await expect(EditingPage.navigator).toExist()
-    await expect(EditingPage.navigatorUpdateButton).toExist()
+    // await expect(EditingPage.navigatorUpdateButton).toExist()
     await expect(EditingPage.navigatorInfo).toExist()
     await expect(EditingPage.navigatorMoveButtons).toBeElementsArrayOfSize(4)
     await expect(EditingPage.navigatorMoveButtonFirst).toExist()

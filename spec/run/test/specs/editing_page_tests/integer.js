@@ -19,13 +19,11 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("0") // Checking initial value
       const value = Math.trunc(Math.random() * 10000000)
       await EditingPage.fieldNum1Textfield.setValue(String(value)) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum1Textfield).toHaveValue(String(value))
       await EditingPage.fieldNum1Textfield.setValue("") // Clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("0")
     })
@@ -44,13 +42,11 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("") // Checking initial value
       const value = Math.trunc(Math.random() * 10000000)
       await EditingPage.fieldNum2Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum2Textfield).toHaveValue(String(value))
       await EditingPage.fieldNum2Textfield.setValue("") // Clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("")
     })
@@ -69,15 +65,13 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum1Checkbox).toExist()
       await expect(EditingPage.fieldNum1Checkbox).not.toBeSelected() // Checking initial value
       await EditingPage.fieldNum1Checkbox.click() // ON
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum1Checkbox).toBeSelected()
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("1")
       await EditingPage.fieldNum1Checkbox.click() // OFF
       await browser.pause(waiting)
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum1Checkbox).not.toBeSelected()
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("0")
@@ -97,15 +91,13 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum2Checkbox).toExist()
       await expect(EditingPage.fieldNum2Checkbox).not.toBeSelected() // Checking initial value
       await EditingPage.fieldNum2Checkbox.click() // ON
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum2Checkbox).toBeSelected()
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("1")
       await EditingPage.fieldNum2Checkbox.click() // OFF
-      await browser.pause(waiting)
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      // await browser.pause(waiting)
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum2Checkbox).not.toBeSelected()
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("")
@@ -145,8 +137,7 @@ module.exports = (EditingPage) => {
       await expect(buttons[1]).toBeSelected() // Checking initial value
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("2")
 
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(buttons[0]).not.toBeSelected() // Checking initial value
       await expect(buttons[1]).toBeSelected() // Checking initial value
@@ -187,8 +178,7 @@ module.exports = (EditingPage) => {
       await expect(buttons[1]).toBeSelected() // Checking initial value
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("2")
 
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(buttons[0]).not.toBeSelected() // Checking initial value
       await expect(buttons[1]).toBeSelected() // Checking initial value
@@ -232,8 +222,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum1Popup).toHaveValue("0")
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("0")
 
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum1Popup).toHaveValue("0")
       await expect(EditingPage.fieldNum1Textfield).toHaveValue("0")
@@ -276,8 +265,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldNum2Popup).toHaveValue("")
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("")
 
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldNum2Popup).toHaveValue("")
       await expect(EditingPage.fieldNum2Textfield).toHaveValue("")

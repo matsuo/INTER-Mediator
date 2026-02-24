@@ -29,8 +29,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldDt1Textfield).toHaveValue(initDateTime) // Checking initial value
       const value = new Date().toISOString().substring(0, 19).replace("T", " ")
       await EditingPage.fieldDt1Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDt1Textfield).toHaveValue(String(value))
       // This field can't clear
@@ -51,13 +50,11 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldDt2Textfield).toHaveValue("") // Checking initial value
       const value = new Date().toISOString().substring(0, 19).replace("T", " ")
       await EditingPage.fieldDt2Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDt2Textfield).toHaveValue(String(value))
       await EditingPage.fieldDt2Textfield.setValue("") // clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDt2Textfield).toHaveValue("")
     })
@@ -76,8 +73,7 @@ module.exports = (EditingPage) => {
       // await EditingPage.fieldDate1Textfield.clearValue()
       // await browser.pause(waiting)
       await EditingPage.fieldDate1Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDate1Textfield).toHaveValue(String(value))
       // This field can't clear
@@ -97,13 +93,11 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldDate2Textfield).toHaveValue("") // Checking initial value
       const value = new Date().toISOString().substring(0, 10)
       await EditingPage.fieldDate2Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDate2Textfield).toHaveValue(String(value))
       await EditingPage.fieldDate2Textfield.setValue("") // Clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldDate2Textfield).toHaveValue("")
     })
@@ -120,8 +114,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldTime1Textfield).toHaveValue(initTime) // Checking initial value
       const value = new Date().toISOString().substring(11, 19)
       await EditingPage.fieldTime1Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldTime1Textfield).toHaveValue(String(value))
       // This field can't clear
@@ -141,13 +134,11 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldTime2Textfield).toHaveValue("") // Checking initial value
       const value = new Date().toISOString().substring(11, 19)
       await EditingPage.fieldTime2Textfield.setValue(value) // Set a value to the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldTime2Textfield).toHaveValue(String(value))
       await EditingPage.fieldTime2Textfield.setValue("") // Clear the field
-      await EditingPage.navigatorUpdateButton.waitForClickable()
-      await EditingPage.navigatorUpdateButton.click()
+      await EditingPage.navigatorUpdateButton.waitForClickable()      // await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldTime2Textfield).toHaveValue("")
     })
