@@ -62,21 +62,6 @@ abstract class MessagingProvider
         if (!$ignoreField && isset($record[$tempStr])) {
             $bodyStr = $record[$tempStr];
         }
-        if (strlen($bodyStr) > 5) {
-            $startPos = strpos($bodyStr, '@@');
-            $endPos = strpos($bodyStr, '@@', $startPos + 2);
-            while ($startPos !== false && $endPos !== false) {
-                $fieldName = trim(substr($bodyStr, $startPos + 2, $endPos - $startPos - 2));
-                $bodyStr = substr($bodyStr, 0, $startPos)
-                    . ($record[$fieldName] ?? '') . substr($bodyStr, $endPos + 2);
-                $startPos = strpos($bodyStr, '@@');
-                if (strlen($bodyStr) <= ($startPos + 2)) {
-                    $endPos = false;
-                } else {
-                    $endPos = strpos($bodyStr, '@@', $startPos + 2);
-                }
-            }
-        }
-        return $bodyStr;
+        return IMUtil::templating($bodyStr, $record);
     }
 }

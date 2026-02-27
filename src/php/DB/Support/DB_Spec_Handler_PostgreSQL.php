@@ -91,6 +91,7 @@ class DB_Spec_Handler_PostgreSQL extends DB_Spec_Handler_PDO
     {
         return in_array(strtoupper($operator), array(
             'LIKE', //
+            'ILIKE', //
             'SIMILAR TO', //
             '~*', //	正規表現に一致、大文字小文字の区別なし	'thomas' ~* '.*Thomas.*'
             '!~', //	正規表現に一致しない、大文字小文字の区別あり	'thomas' !~ '.*Thomas.*'

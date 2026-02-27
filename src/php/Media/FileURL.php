@@ -29,6 +29,7 @@ use INTERMediator\Params;
  */
 class FileURL extends UploadingSupport implements DownloadingSupport
 {
+    private ?string $customFileName = null;
     /** Handles file upload processing, including CSV import if specified.
      * @param Proxy $db The database proxy instance.
      * @param string|null $url The redirect URL on error.
@@ -47,8 +48,9 @@ class FileURL extends UploadingSupport implements DownloadingSupport
      */
     public function processing(Proxy  $db, ?string $url, ?array $options, array $files, bool $noOutput, array $field,
                                string $contextName, ?string $keyField, ?string $keyValue,
-                               ?array $dataSource, ?array $dbSpec, int $debug): void
+                               ?array $dataSource, ?array $dbSpec, int $debug, ?string $customFileName): void
     {
+        $this->customFileName = $customFileName;
         $counter = -1;
         foreach ($files as $fileInfo) {
             $counter += 1;
@@ -60,7 +62,7 @@ class FileURL extends UploadingSupport implements DownloadingSupport
                 $this->csvImportOperation($db, $dataSource, $options, $dbSpec, $debug, $contextName, $fileInfoTemp);
             } else {
                 list($result, $filePath, $filePartialPath) = $this->decideFilePath($db, $noOutput, $options,
-                    $contextName, $keyField, $keyValue, $targetFieldName, $filePathInfo);
+                    $contextName, $keyField, $keyValue, $targetFieldName, $filePathInfo, $counter);
                 if ($result === false) {
                     return;
                 }
@@ -155,7 +157,7 @@ class FileURL extends UploadingSupport implements DownloadingSupport
      */
     private function decideFilePath(Proxy  $db, bool $noOutput, ?array $options,
                                     string $contextName, string $keyField, string $keyValue,
-                                    string $targetFieldName, array $filePathInfo): array
+                                    string $targetFieldName, array $filePathInfo, int $counter): array
     {
         $result = true;
         $fileRoot = $options['media-root-dir'] ?? Params::getParameterValue('mediaRootDir', null) ?? null;
@@ -173,8 +175,11 @@ class FileURL extends UploadingSupport implements DownloadingSupport
         } catch (Exception $ex) {
             $rand4Digits = rand(1000, 9999);
         }
-        $filePartialPath = $dirPath . '/' . $filePathInfo['filename'] . '_'
-            . $rand4Digits . '.' . $filePathInfo['extension'];
+        $filePartialPath = $dirPath . '/'
+            . (!is_null($this->customFileName)
+                ? ($this->customFileName . ($counter > 1 ? "_" . $counter : ""))
+                : ($filePathInfo['filename'] . '_' . $rand4Digits))
+            . '.' . $filePathInfo['extension'];
         $filePath = $fileRoot . $filePartialPath;
         if (strpos($filePath, $fileRoot) !== 0) {
             $this->prepareErrorOut($db, $noOutput, "Invalid Path Error.");

@@ -462,6 +462,7 @@ class DefinitionChecker
                     'field' => 'string',
                     'context' => 'string',
                     'container' => 'boolean|string(FileSystem|FileMakerContainer|S3|Dropbox|FileURL)',
+                    'file-name' => 'string',
                 ]
             ],
             'calculation' => [

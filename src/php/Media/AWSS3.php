@@ -65,6 +65,7 @@ class AWSS3 extends UploadingSupport implements DownloadingSupport
      * @var string|null
      */
     private ?string $fileName = null;
+    private ?string $customFileName = null;
 
     /** AWSS3 constructor. Initializes S3 credentials and configuration from parameters.
      */
@@ -131,13 +132,14 @@ class AWSS3 extends UploadingSupport implements DownloadingSupport
      * @param array|null $dataSource Data source definition.
      * @param array|null $dbSpec Database specification.
      * @param int $debug Debug level.
-     * @throws Exception If an error occurs during processing.
      * @return void
+     * @throws Exception If an error occurs during processing.
      */
     public function processing(Proxy  $db, ?string $url, ?array $options, array $files, bool $noOutput, array $field,
                                string $contextName, ?string $keyField, ?string $keyValue,
-                               ?array $dataSource, ?array $dbSpec, int $debug): void
+                               ?array $dataSource, ?array $dbSpec, int $debug, ?string $customFileName): void
     {
+        $this->customFileName = $customFileName;
         $counter = -1;
         foreach ($files as $fileInfo) {
             $counter += 1;
@@ -160,8 +162,11 @@ class AWSS3 extends UploadingSupport implements DownloadingSupport
             } catch (Exception $ex) {
                 $rand4Digits = rand(1000, 9999);
             }
-            $objectKey = $dirPath . '/' . $filePathInfo['filename'] . '_' . $rand4Digits . '.' . $filePathInfo['extension'];
-
+            $objectKey = $dirPath . '/'
+                . (!is_null($this->customFileName)
+                    ? ($this->customFileName . ($counter > 1 ? "_" . $counter : ""))
+                    : ($filePathInfo['filename'] . '_' . $rand4Digits))
+                . '.' . $filePathInfo['extension'];
             $clientArgs = ['version' => 'latest', 'region' => $this->accessRegion];
             if ($this->s3AccessProfile) {
                 $clientArgs['profile'] = $this->s3AccessProfile;

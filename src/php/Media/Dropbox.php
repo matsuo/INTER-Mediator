@@ -53,6 +53,7 @@ class Dropbox extends UploadingSupport implements DownloadingSupport
      * @var string|null
      */
     private ?string $fileName = null;
+    private ?string $customFileName = null;
 
     /** Dropbox constructor. Initializes Dropbox API credentials and settings from parameters.
      */
@@ -107,13 +108,14 @@ class Dropbox extends UploadingSupport implements DownloadingSupport
      * @param array|null $dataSource Data source definition.
      * @param array|null $dbSpec Database specification.
      * @param int $debug Debug level.
-     * @throws Exception If an error occurs during processing.
      * @return void
+     * @throws Exception If an error occurs during processing.
      */
     public function processing(Proxy  $db, ?string $url, ?array $options, array $files, bool $noOutput, array $field,
                                string $contextName, ?string $keyField, ?string $keyValue,
-                               ?array $dataSource, ?array $dbSpec, int $debug): void
+                               ?array $dataSource, ?array $dbSpec, int $debug, ?string $customFileName): void
     {
+        $this->customFileName = $customFileName;
         $counter = -1;
         foreach ($files as $fileInfo) { // Single file only
             $counter += 1;
@@ -137,8 +139,10 @@ class Dropbox extends UploadingSupport implements DownloadingSupport
                 $rand4Digits = rand(1000, 9999);
             }
 
-            $objectPath = $this->rootInDropbox . '/' . $dirPath
-                . '/' . $filePathInfo['filename'] . '_' . $rand4Digits . '.' . $filePathInfo['extension'];
+            $objectPath = $this->rootInDropbox . '/' . $dirPath . '/'
+                . (!is_null($this->customFileName)
+                    ? ($this->customFileName . ($counter > 1 ? "_" . $counter : ""))
+                    : ($filePathInfo['filename'] . '_' . $rand4Digits)) . '.' . $filePathInfo['extension'];
             $storedURL = "dropbox://$objectPath";
 
             try {
