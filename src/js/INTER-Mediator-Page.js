@@ -81,6 +81,15 @@ let INTERMediatorOnPage = {
   justUpdateWholePage: false,
   justMoveToDetail: false,
 
+  doBeforeValueChange: null,
+  doAfterValueChange: null,
+  processingBeforePostOnlyContext: null,
+  processingAfterPostOnlyContext: null,
+  doAfterValidationSucceed: null,
+  doAfterValidationFailure: null,
+  doAfterCreateRecord: null,
+  doAfterDeleteRecord: null,
+
   /* This method is going to supply by accessing a definition file. This entry is just a definition for static analyzer. */
   getTerms: function () {
     return {dummy: 'dummy'}

@@ -75,7 +75,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldBool1Checkbox).not.toBeSelected() // Checking initial value
       await EditingPage.fieldBool1Checkbox.waitForClickable() // For stability
       await EditingPage.fieldBool1Checkbox.click() // ON
-      await browser.pause(waiting)
+      // await browser.pause(waiting)
       await EditingPage.navigatorUpdateButton.waitForClickable()
       await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)

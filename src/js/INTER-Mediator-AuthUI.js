@@ -417,9 +417,6 @@ let IMLibAuthenticationUI = {
     window.scrollTo(0, 0)
     userBox.focus()
     IMLibAuthentication.authCount++
-    if (IMLibAuthenticationUI.doAfterLoginPanel) {
-      IMLibAuthenticationUI.doAfterLoginPanel(false)
-    }
   },
 
   /**
@@ -613,7 +610,6 @@ let IMLibAuthenticationUI = {
         }
       }
     }
-
     return message
   },
 
@@ -697,9 +693,6 @@ let IMLibAuthenticationUI = {
     window.scrollTo(0, 0)
     codeBox.focus()
     IMLibAuthentication.authCount++
-    if (IMLibAuthenticationUI.doAfterLoginPanel) {
-      IMLibAuthenticationUI.doAfterLoginPanel(true)
-    }
     codeBox.onkeydown = function (event) {
       if (event.code === 'Enter') {
         authButton.onclick()

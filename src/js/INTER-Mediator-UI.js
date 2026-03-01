@@ -253,7 +253,7 @@ const IMLibUI = {
       messageNodes = []
     }
     try {
-      let i
+      let lastIndex = 0
       const linkInfo = INTERMediatorLib.getLinkedElementInfo(changedObj)
       let didValidate = false
       let result = true
@@ -263,7 +263,8 @@ const IMLibUI = {
         if (matched[1] !== IMLibLocalContext.contextName) {
           const context = INTERMediatorLib.getNamedObject(INTERMediatorOnPage.getDataSources(), 'name', matched[1])
           if (context && context.validation) {
-            for (i = 0; i < linkInfo.length; i++) {
+            for (let i = 0; i < linkInfo.length; i++) {
+              lastIndex = i
               matched = linkInfo[i].match(/([^@]+)@([^@]+)/)
               for (const index in context.validation) {
                 if (context.validation[index].field === matched[2]) {
@@ -278,16 +279,13 @@ const IMLibUI = {
                       switch (context.validation[index].notify) {
                         case 'inline':
                           INTERMediatorLib.clearErrorMessage(changedObj)
-                          messageNode = INTERMediatorLib.createErrorMessageNode(
-                            'SPAN', context.validation[index].message)
-                          changedObj.parentNode.insertBefore(
-                            messageNode, changedObj.nextSibling)
+                          messageNode = INTERMediatorLib.createErrorMessageNode('SPAN', context.validation[index].message)
+                          changedObj.parentNode.insertBefore(messageNode, changedObj.nextSibling)
                           messageNodes.push(messageNode)
                           break
                         case 'end-of-sibling':
                           INTERMediatorLib.clearErrorMessage(changedObj)
-                          messageNode = INTERMediatorLib.createErrorMessageNode(
-                            'DIV', context.validation[index].message)
+                          messageNode = INTERMediatorLib.createErrorMessageNode('DIV', context.validation[index].message)
                           changedObj.parentNode.appendChild(messageNode)
                           messageNodes.push(messageNode)
                           break
@@ -331,7 +329,7 @@ const IMLibUI = {
         }
         if (didValidate) {
           if (INTERMediatorOnPage.doAfterValidationSucceed) {
-            result = INTERMediatorOnPage.doAfterValidationSucceed(changedObj, linkInfo[i])
+            result = INTERMediatorOnPage.doAfterValidationSucceed(changedObj, linkInfo[lastIndex])
           }
         }
       }

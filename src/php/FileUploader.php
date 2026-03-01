@@ -17,6 +17,7 @@
 namespace INTERMediator;
 
 use Exception;
+use INTERMediator\DB\Logger;
 use INTERMediator\DB\Proxy;
 
 /**
@@ -171,8 +172,9 @@ class FileUploader
         $this->db = new DB\Proxy();
         $this->db->initialize($dataSource, $options, $dbSpec, $debug, $contextName);
 
-        $this->db->logger->setDebugMessage("[FileUploader] FileUploader class's processing starts: files="
-            . str_replace(["\n", " "], ["", ""], var_export($files, true)), 2);
+        $this->db->logger->setDebugMessage("[FileUploader::processingWithParameters] contextName={$contextName}, "
+            . "keyField={$keyField}, keyValue={$keyValue}, field=" . var_export($field, true)
+            . ", files=" . var_export($files, true), 2);
 
         $contextDef = $this->db->dbSettings->getDataSourceTargetArray();
         $dbClass = ($contextDef['db-class'] ?? ($dbSpec['db-class'] ?? Params::getParameterValue('dbClass', '')));
@@ -189,11 +191,32 @@ class FileUploader
             return;
         }
 
+        // Getting the custom file name settings from context definition
+        $targetField = $field[0];
+        $customFileName = null;
+        if (isset($contextDef['file-upload'])) {
+            foreach ($contextDef['file-upload'] as $uploadDef) {
+                if ($uploadDef['field'] === $targetField && isset($uploadDef['file-name'])) {
+                    $customFileName = $uploadDef['file-name'];
+                }
+            }
+        }
+        // Handling the custom file name
+        if (!is_null($customFileName)) {
+            $this->db->dbSettings->addExtraCriteria($keyField, "=", $keyValue);
+            $this->db->processingRequest("read");
+            $currentRecord = ($this->db->getDatabaseResult())[0];
+            $this->db->logger->setDebugMessage("[FileUploader::processingWithParameters] Current record: " . var_export($currentRecord, true), 2);
+            $customFileName = IMUtil::templating($customFileName, $currentRecord);
+        }
+        $this->db->logger->setDebugMessage("[FileUploader::processingWithParameters] customFileName=" . $customFileName, 2);
+
+        // Instantiating the media class object and call the processing method.
         $className = "INTERMediator\\Media\\{$className}"; // Instantiated media class object.
         $this->db->logger->setDebugMessage("Instantiate the class '{$className}'", 2);
         $mediaClassObj = new $className();
         $mediaClassObj->processing($this->db, null, $options, $files, $noOutput, $field,
-            $contextName, $keyField, $keyValue, $dataSource, $dbSpec, $debug);
+            $contextName, $keyField, $keyValue, $dataSource, $dbSpec, $debug, $customFileName);
         if ($field[0] == "_im_csv_upload") {    // CSV File uploading
             if (isset($this->db->outputOfProcessing['dbresult'])) { // For CSV importing
                 $this->dbresult = $this->db->outputOfProcessing['dbresult'];

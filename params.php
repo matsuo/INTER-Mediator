@@ -13,11 +13,11 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-/* Database connection (PDO or FileMaker_FX)
+/* Database connection (PDO or FileMaker_DataAPI)
  * =================== */
 $dbClass = 'PDO';
 
-// Common settings for FileMaker_FX and PDO:
+// Common settings for FileMaker_DataAPI and PDO:
 $dbUser = 'web';
 $dbPassword = 'password';
 //$dbPassword = 'Profile|IM|test_db|db_password';
@@ -28,7 +28,7 @@ For using profile to hide the password, the file '~/.im/credentials' has the con
 db_password = password
 */
 
-// FileMaker_FX/DataAPI are aware of below:
+// FileMaker_DataAPI are aware of below:
 $dbServer = '10.211.61.3'; //'127.0.0.1'; //
 $dbPort = '80';
 //$dbDataType = 'FMPro12';
@@ -170,7 +170,7 @@ $authRealm = 'INTER-Mediator_Samples';
 //$mailContext2FA = "mailtemplate@id=995"; // Template record for the mail to send the 2FA code.
 //$digitsOf2FACode = 6; // Default is 4 for email and 6 for authenticator.
 //$expiringSeconds2FA = 1000; // 2FA effective seconds from code input for email.
-//$fixed2FACode = "5555"; // Fixed 2FA code for the testing purpose. On the real system, this has to comment out.
+$fixed2FACode = "5555"; // Fixed 2FA code for the testing purpose. On the real system, this has to comment out.
 
 /* Authentication panels customizing */
 //$authPanelTitle= "そうだ";  // Auth Panel's title

@@ -238,6 +238,7 @@ module.exports = (EditingPage) => {
       await expect(EditingPage.fieldText1Checkbox).toBeSelected()
       await expect(EditingPage.fieldText1Textfield).toHaveValue("ON")
       await EditingPage.fieldText1Checkbox.click() // OFF
+
       await EditingPage.navigatorUpdateButton.click()
       await browser.pause(waiting)
       await expect(EditingPage.fieldText1Checkbox).not.toBeSelected()

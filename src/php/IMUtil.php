@@ -19,6 +19,7 @@ namespace INTERMediator;
 use DateInterval;
 use DateTime;
 use Exception;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -948,5 +949,43 @@ class IMUtil
             return $str;
         }
         return $targetValue;
+    }
+
+    /**
+     * Apply a very small template substitution to the given string.
+     *
+     * This method replaces all occurrences of placeholders in the form of
+     * `@@ field_name @@` (i.e. text surrounded by `@@`) with the corresponding
+     * value from the current record.
+     *
+     * - If the placeholder field does not exist in `$currentRecord`, it is
+     *   replaced with an empty string.
+     * - If `$str` is null/too short or `$currentRecord` is empty, the input
+     *   string is returned as-is.
+     *
+     * @param ?string $str Template source string that may contain `@@...@@` placeholders.
+     * @param array $currentRecord Associative array representing the current record.
+     * @return ?string The rendered string after placeholder substitution.
+     */
+    public static function templating(?string $str, array $currentRecord): ?string
+    {
+        if (is_null($str) || strlen($str) < 5 || count($currentRecord) < 1) {
+            return $str;
+        }
+
+        $startPos = strpos($str, '@@');
+        $endPos = strpos($str, '@@', $startPos + 2);
+        while ($startPos !== false && $endPos !== false) {
+            $fieldName = trim(substr($str, $startPos + 2, $endPos - $startPos - 2));
+            $str = substr($str, 0, $startPos)
+                . ($currentRecord[$fieldName] ?? '') . substr($str, $endPos + 2);
+            $startPos = strpos($str, '@@');
+            if (strlen($str) <= ($startPos + 2)) {
+                $endPos = false;
+            } else {
+                $endPos = strpos($str, '@@', $startPos + 2);
+            }
+        }
+        return $str;
     }
 }

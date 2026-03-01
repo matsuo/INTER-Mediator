@@ -120,7 +120,7 @@ class FileMakerContainer extends UploadingSupport implements DownloadingSupport
      */
     public function processing(Proxy  $db, ?string $url, ?array $options, array $files, bool $noOutput, array $field,
                                string $contextName, ?string $keyField, ?string $keyValue,
-                               ?array $dataSource, ?array $dbSpec, int $debug): void
+                               ?array $dataSource, ?array $dbSpec, int $debug, ?string $customFileName): void
     {
         $mediaRootDir = $options['media-root-dir'] ?? Params::getParameterValue('mediaRootDir', null) ?? null;
         if (!$mediaRootDir) {

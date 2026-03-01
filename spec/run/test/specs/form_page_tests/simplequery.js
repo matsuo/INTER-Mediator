@@ -3,7 +3,7 @@ module.exports = (FormPage) => {
 
   describe('Simple Query', () => {
     it('1-can retrieve the first record from database.', async () => {
-      await FormPage.navigatorUpdateButton.waitForClickable();
+      await FormPage.navigatorMoveButtonFirst.waitForClickable();
       await FormPage.navigatorMoveButtonFirst.click()
       await browser.pause(waiting)
 
@@ -20,7 +20,7 @@ module.exports = (FormPage) => {
       await expect(FormPage.fieldPersonMemo).toHaveValue("")
     });
     it('2-can retrieve the second record from database.', async () => {
-      await FormPage.navigatorUpdateButton.waitForClickable();
+      await FormPage.navigatorMoveButtonNext.waitForClickable();
       await FormPage.navigatorMoveButtonNext.click()
       await browser.pause(waiting)
 
@@ -37,7 +37,7 @@ module.exports = (FormPage) => {
       await expect(FormPage.fieldPersonMemo).toHaveValue("")
     });
     it('3-can retrieve the third record from database.', async () => {
-      await FormPage.navigatorUpdateButton.waitForClickable();
+      await FormPage.navigatorMoveButtonNext.waitForClickable();
       await FormPage.navigatorMoveButtonNext.click()
       await browser.pause(waiting)
 
