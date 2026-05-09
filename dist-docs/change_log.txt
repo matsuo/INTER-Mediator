@@ -10,7 +10,9 @@ Please check: https://github.com/INTER-Mediator/INTER-Mediator
 Also the Migration Guide (Japanese) might be informative:
   https://inter-mediator.info/ja/for-developers/migration.html
 
-Ver.15 (in Development)
+Ver.16 (in Development)
+
+Ver.15 (May 10, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".
   The "autofill" UI of passkey authentication is supported by $isAddClassAuthn in params.php file, or 'add-class-authn'
   key value in definition file.
