@@ -934,8 +934,8 @@ if node[:platform] == 'ubuntu' || (node[:platform] == 'redhat' && node[:platform
 end
 if (node[:platform] == 'ubuntu' && node[:platform_version].to_f < 22) || (node[:platform] == 'redhat' && node[:platform_version].to_f >= 6 && node[:platform_version].to_f < 8)
   if (node[:platform] == 'ubuntu' && node[:platform_version].to_f < 22) || (node[:platform] == 'redhat' && node[:platform_version].to_f >= 7 && node[:platform_version].to_f < 8)
-    execute 'npm install -g n --before 2025-09-14' do
-      command 'npm install -g n --before 2025-09-14'
+    execute 'npm install -g n --before 2026-02-27' do
+      command 'npm install -g n --before 2026-02-27'
     end
     execute 'n stable' do
       command 'n stable'
@@ -1326,8 +1326,8 @@ end
 # Install npm packages
 
 if (node[:platform] == 'ubuntu' && node[:platform_version].to_f >= 14 && node[:platform_version].to_f < 20) || (node[:platform] == 'redhat' && node[:platform_version].to_f >= 6)
-  execute 'npm install -g buster --unsafe-perm --before 2025-09-14' do
-    command 'npm install -g buster --unsafe-perm --before 2025-09-14'
+  execute 'npm install -g buster --unsafe-perm --before 2026-02-27' do
+    command 'npm install -g buster --unsafe-perm --before 2026-02-27'
   end
 end
 
@@ -1339,8 +1339,8 @@ if (node[:platform] == 'ubuntu' && node[:platform_version].to_f >= 14) || (node[
   end
 
   if node[:platform] != 'alpine'
-    execute 'npm install -g phantomjs-prebuilt --unsafe-perm --before 2025-09-14' do
-      command 'npm install -g phantomjs-prebuilt --unsafe-perm --before 2025-09-14'
+    execute 'npm install -g phantomjs-prebuilt --unsafe-perm --before 2026-02-27' do
+      command 'npm install -g phantomjs-prebuilt --unsafe-perm --before 2026-02-27'
     end
   end
 end
@@ -2353,8 +2353,8 @@ if node[:platform] == 'alpine'
   execute "cd \"#{IMROOT}\";composer install" do
     command "cd \"#{IMROOT}\";composer install"
   end
-  execute "cd \"#{IMROOT}\";npm install --before 2025-09-14" do
-    command "cd \"#{IMROOT}\";npm install --before 2025-09-14"
+  execute "cd \"#{IMROOT}\";npm install --before 2026-02-27" do
+    command "cd \"#{IMROOT}\";npm install --before 2026-02-27"
   end
 end
 
