@@ -35,11 +35,5 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 pnpm install --frozen-lockfile
 
-cd ../run_v8
-pnpm install --frozen-lockfile
-
-cd ../run-safari
-pnpm install --frozen-lockfile
-
 # brew unlink php@7.4
 # brew link php
