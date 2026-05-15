@@ -469,7 +469,10 @@ abstract class ProviderAdapter
         $challenges = $dbProxy->authDbClass->authHandler->authSupportRetrieveChallenge(
             "0", substr($key, 0, 64), true, $prefix, true);
         // Split the retrieved challenge into an array
-        return explode("\n", $challenges);
+        if(is_array($challenges)) {
+            $challenges = $challenges[0];
+        }
+        return [$challenges];
     }
 
     /** Retrieves the stored authorization code from the internal database.

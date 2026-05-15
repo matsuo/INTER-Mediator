@@ -9,18 +9,30 @@ cd "${originalPath}"
 
 # rm -rf vendor node_modules
 
+echo "******************************************************"
+echo "Target Directory: $(pwd)"
+echo "******************************************************"
 mv '__Did_you_run_composer_update.txt' spec/tempfile
 composer update --with-all-dependencies
 pnpm install --frozen-lockfile
 mv spec/tempfile '__Did_you_run_composer_update.txt'
 
 cd spec/run
+echo "******************************************************"
+echo "Target Directory: $(pwd)"
+echo "******************************************************"
 pnpm install --frozen-lockfile
 
 cd ../run_v8
+echo "******************************************************"
+echo "Target Directory: $(pwd)"
+echo "******************************************************"
 pnpm install --frozen-lockfile
 
 cd ../run-safari
+echo "******************************************************"
+echo "Target Directory: $(pwd)"
+echo "******************************************************"
 pnpm install --frozen-lockfile
 
 # brew unlink php@7.4

@@ -48,6 +48,10 @@ The test application(https://github.com/INTER-Mediator/IMTesting_OAuth) is deplo
 
 The format of below is: [commit code from git log], [Version from composer.json], [Checker name], [Result]
 
+- commit a7e10bcf5da603ffa0b174cd3f190f3aa8ed3d2c (Thu May 7 15:28:25 2026 +0900)
+  INTER-Mediator Ver.15 (2026-05-07),
+  by Masayuki Nii <nii@msyk.net>, OK
+
 ### Previous Test Records
 
 TBD
