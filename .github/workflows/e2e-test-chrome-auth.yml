@@ -40,11 +40,9 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install PHP
-        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
+        uses: ./.github/actions/setup-php
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: intl #optional
-          ini-values: "post_max_size=256M" #optional
       - name: Print Env Varialbles
         run: printenv
       - name: PHP Module Checking

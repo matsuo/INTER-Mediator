@@ -1,0 +1,35 @@
+name: Setup PHP
+
+inputs:
+  php-version:
+    description: 'PHP version to setup'
+    required: false
+    default: '8.5'
+  extensions:
+    description: 'Comma-separated list of PHP extensions to install'
+    required: false
+    default: 'mbstring, intl, json, bcmath, zip, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, exif, gd, ldap, fileinfo'
+  ini-values:
+    description: 'The values you want to add to php.ini'
+    required: false
+    default: 'post_max_size=256M'
+  tools:
+    description: 'Comma-separated list of tools to install'
+    required: false
+    default: composer:2.9.8
+  coverage:
+    description: 'The code-coverage driver you want to set up'
+    required: false
+    default: none
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+      with:
+        php-version: ${{ inputs.php-version }}
+        coverage: none
+        extensions: ${{ inputs.extensions }}
+        ini-values: ${{ inputs.ini-values }}
+        tools: ${{ inputs.tools }}
