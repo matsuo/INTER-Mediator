@@ -4,7 +4,7 @@ Installation and starting tests are below. The last command can the end-to-end t
 ```
 cd spec/run
 pnpm install --frozen-lockfile
-npm run wdio
+pnpm run wdio
 ```
 After setup with the command ```pnpm install --frozen-lockfile```, you can test with this command on the root of this repository:
 ```
@@ -20,31 +20,31 @@ The samples/E2E-Test directory has the target pages for these tests.
 Just run the test with Google Chrome
 
 ```
-npx wdio wdio-auth-chrome.conf.js 
+pnpm run wdio wdio-auth-chrome.conf.js 
 ```
 
 Just run the test with Microsoft Edge
 
 ```
-npx wdio wdio-form-edge.conf.js 
+pnpm run wdio wdio-form-edge.conf.js 
 ```
 
 Just run the test with Firefox
 
 ```
-npx wdio wdio-auth-firefox.conf.js 
+pnpm run wdio wdio-auth-firefox.conf.js 
 ```
 
 Just run the test with Safari. This test works on the /spec/run-safari directory.
 
 ```
 cd /spec/run-safari
-npx wdio wdio-safari.conf.js 
+pnpm run wdio wdio-safari.conf.js 
 ```
 
 Another syncing between clients test.
 
 ```
-npx wdio wdio-sync-chrome.conf.jp
+pnpm run wdio wdio-sync-chrome.conf.jp
 ```
 
