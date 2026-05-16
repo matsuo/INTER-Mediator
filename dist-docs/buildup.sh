@@ -91,7 +91,7 @@ fi
 
 if [ ! -e "${originalPath}/node_modules/jssha/dist/sha.js" ];then
     /bin/echo "========================"
-    /bin/echo "Before using this buildup.sh script, you have to execute 'composer update' first of all."
+    /bin/echo "Before using this buildup.sh script, you have to execute 'composer install' first of all."
     exit 0;
 fi
 
@@ -213,7 +213,7 @@ cp -prf "${originalPath}/themes" "${buildPath}"
 
 /bin/echo "PROCESSING: PHP/JavaScript Libraries"
 cd "${buildPath}"
-composer update --no-dev
+composer install --no-dev
 
 # /bin/echo "Clean up dot files."
 # find "${buildPath}" -name "\.*" -exec rm -rf {} \; -prune

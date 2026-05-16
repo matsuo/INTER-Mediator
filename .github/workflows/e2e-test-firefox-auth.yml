@@ -56,8 +56,6 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
-      - name: Update dependencies
-        run: composer update
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Setup Samples

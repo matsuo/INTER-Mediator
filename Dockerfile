@@ -14,6 +14,6 @@ RUN docker-php-ext-install zip pdo pdo_mysql exif
 RUN apt-get install -y libicu-dev && docker-php-ext-configure intl && docker-php-ext-install intl
 RUN docker-php-ext-install gd
 RUN uname -m
-RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer; chmod +x /usr/local/bin/composer && cd /var/www/html && composer update
+RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer; chmod +x /usr/local/bin/composer && cd /var/www/html && composer install
 RUN chown www-data /var/www
 RUN sed -i -e "s/mysql:host=127.0.0.1;/mysql:host=db;/g" /var/www/html/params.php
