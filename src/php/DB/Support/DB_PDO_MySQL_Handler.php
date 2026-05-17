@@ -236,7 +236,7 @@ class DB_PDO_MySQL_Handler extends DB_PDO_Handler
      */
     public function optionalOperationInSetup(): void
     {
-        $this->dbClassObj->link->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        //$this->dbClassObj->link->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, true);
     }
 
     /** Checks if the SHA256 hash can be migrated.

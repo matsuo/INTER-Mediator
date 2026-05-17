@@ -369,23 +369,6 @@ const INTERMediatorLib = {
       if (attr) {
         return true
       }
-      if (INTERMediator.titleAsLinkInfo) {
-        if (node.getAttribute('TITLE') !== null && node.getAttribute('TITLE').length > 0) {
-          // IE: If the node doesn't have a title attribute, getAttribute
-          // doesn't return null.
-          // So it required check if it's empty string.
-          return true
-        }
-      }
-      if (INTERMediator.classAsLinkInfo) {
-        const classInfo = node.getAttribute('class')
-        if (classInfo !== null) {
-          const matched = classInfo.match(/IM\[.*\]/)
-          if (matched) {
-            return true
-          }
-        }
-      }
     }
     return false
   },
@@ -479,6 +462,20 @@ const INTERMediatorLib = {
     }
   },
 
+  isBindingNodeText(node) {
+    let result = false
+    for (const def of INTERMediatorLib.getLinkedElementInfo(node)) {
+      const defArray = def.split(INTERMediator.separator)
+      if (defArray.length < 3) {
+        if (node.tagName !== 'INPUT' && node.tagName !== 'TEXTAREA' && node.tagName !== 'SELECT') {
+          result = true
+        }
+      } else if (defArray[2] === 'innerHTML' || defArray[2] === 'textContent') {
+        result = true
+      }
+      return result
+    }
+  },
   /**
    * Get the table name / field name information from the node as the array of
    * definitions.
@@ -502,28 +499,10 @@ const INTERMediatorLib = {
     if (INTERMediatorLib.isLinkedElement(node)) {
       let attr = node.getAttribute('data-im')
       if (attr !== null && attr.length > 0) {
-        const reg = new RegExp('[\\s' + INTERMediator.defDivider + ']+')
+        const reg = new RegExp('[\\s]+')
         const eachDefs = attr.split(reg)
         for (let i = 0; i < eachDefs.length; i += 1) {
           if (eachDefs[i] && eachDefs[i].length > 0) {
-            defs.push(resolveAlias(eachDefs[i]))
-          }
-        }
-        return defs
-      }
-      if (INTERMediator.titleAsLinkInfo && node.getAttribute('TITLE')) {
-        const eachDefs = node.getAttribute('TITLE').split(INTERMediator.defDivider)
-        for (let i = 0; i < eachDefs.length; i += 1) {
-          defs.push(resolveAlias(eachDefs[i]))
-        }
-        return defs
-      }
-      if (INTERMediator.classAsLinkInfo) {
-        attr = node.getAttribute('class')
-        if (attr !== null && attr.length > 0) {
-          const matched = attr.match(/IM\[([^\]]*)\]/)
-          const eachDefs = matched[1].split(INTERMediator.defDivider)
-          for (let i = 0; i < eachDefs.length; i += 1) {
             defs.push(resolveAlias(eachDefs[i]))
           }
         }
@@ -547,21 +526,12 @@ const INTERMediatorLib = {
     if (INTERMediatorLib.isWidgetElement(node)) {
       let classAttr = node.getAttribute('data-im-widget')
       if (classAttr && classAttr.length > 0) {
-        const reg = new RegExp('[\\s' + INTERMediator.defDivider + ']+')
+        const reg = new RegExp('[\\s]+')
         const eachDefs = classAttr.split(reg)
         for (let i = 0; i < eachDefs.length; i += 1) {
           if (eachDefs[i] && eachDefs[i].length > 0) {
             defs.push(eachDefs[i])
           }
-        }
-        return defs
-      }
-      classAttr = node.getAttribute('class')
-      if (classAttr && classAttr.length > 0) {
-        const matched = classAttr.match(/IM_WIDGET\[([^\]]*)\]/)
-        const eachDefs = matched[1].split(INTERMediator.defDivider)
-        for (let i = 0; i < eachDefs.length; i += 1) {
-          defs.push(eachDefs[i])
         }
         return defs
       }

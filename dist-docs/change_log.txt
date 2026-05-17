@@ -47,6 +47,8 @@ Ver.15 (May 10, 2026)
 - To prevent brute force attack, the authentication failure count is going to be stored. The default is inavtive.
   The variable $authFailCount in the params.php file or "auth-fail-count" keyed value in definition file can be set to
   any number which is larger than 0 to activate.
+- Deprecated properties INTERMediator.titleAsLinkInfo, INTERMediator.classAsLinkInfo and INTERMediator.defDivider are
+  removed from code.
 - [Bug Fix]On version 12, INTERMediator.clearCondition method clears page number of pagination in any case.
   INTERMediator.clearCondition should be cleared any parameter, just clears all conditions.
 - [SECURITY ISSUES] The account manager of sample code can be accessed on same case. So the samples are moved to
