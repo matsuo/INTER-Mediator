@@ -44,21 +44,23 @@
     "postinstall": "npmpd"
   },
   "devDependencies": {
-    "jest": "*",
-    "jest-environment-jsdom": "*",
-    "power-assert": "*",
-    "ws": ">=8.17.1"
+    "jest": "30.3.0",
+    "jest-environment-jsdom": "30.3.0",
+    "power-assert": "1.6.1",
+    "ws": "8.20.0",
+    "npm": "11.13.0",
+    "pnpm": "11.0.3"
   },
   "dependencies": {
     "cors": "*",
     "express": "*",
-    "nodemon": ">=3.0.2",
+    "hugerte": "*",
     "inter-mediator-expressionparser": "1.2.2",
     "inter-mediator-formatter": "1.1.0",
     "inter-mediator-locale": "1.0.4",
     "inter-mediator-nodegraph": "1.0.6",
-    "inter-mediator-plugin-codemirror": "1.1.0",
     "inter-mediator-plugin-chartjs": "1.0.0",
+    "inter-mediator-plugin-codemirror": "1.1.0",
     "inter-mediator-plugin-flatpickr": "1.1.0",
     "inter-mediator-plugin-hugerte": "1.0.0",
     "inter-mediator-plugin-jquerydatepicker": "1.1.0",
@@ -68,11 +70,11 @@
     "inter-mediator-plugin-popupselector": "1.1.0",
     "inter-mediator-plugin-qrcode": "1.1.0",
     "inter-mediator-queue": "1.0.9",
-    "jssha": ">=3.0.0",
+    "jssha": "3.3.1",
+    "nodemon": "3.1.14",
     "npm-platform-dependencies": "*",
-    "socket.io": ">=3.1.0",
-    "socket.io-client": ">=3.1.0",
-    "hugerte": "*"
+    "socket.io": "4.8.3",
+    "socket.io-client": "4.8.3"
   },
   "win32Dependencies": {
     "forever-win": "*"

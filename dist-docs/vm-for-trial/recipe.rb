@@ -1319,8 +1319,8 @@ if node[:platform] == 'redhat' && node[:platform_version].to_f >= 7 && node[:pla
   end
 end
 
-execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update --with-all-dependencies'" do
-  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update --with-all-dependencies'"
+execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer install'" do
+  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer install'"
 end
 
 # Install npm packages
