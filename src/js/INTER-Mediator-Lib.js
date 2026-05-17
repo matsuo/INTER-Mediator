@@ -467,14 +467,14 @@ const INTERMediatorLib = {
     for (const def of INTERMediatorLib.getLinkedElementInfo(node)) {
       const defArray = def.split(INTERMediator.separator)
       if (defArray.length < 3) {
-        if (node.tagName !== 'INPUT' && node.tagName !== 'TEXTAREA' && node.tagName !== 'SELECT') {
+        if (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || node.tagName === 'SELECT' || node.tagName === 'OPTION') {
           result = true
         }
       } else if (defArray[2] === 'innerHTML' || defArray[2] === 'textContent') {
         result = true
       }
-      return result
     }
+    return result
   },
   /**
    * Get the table name / field name information from the node as the array of
