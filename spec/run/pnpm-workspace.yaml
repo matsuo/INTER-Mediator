@@ -1,2 +1,5 @@
-minimumReleaseAge: 10080  # 1 week
-
+allowBuilds:
+  edgedriver: false
+  esbuild: false
+  geckodriver: false
+minimumReleaseAge: 10080 # 1 week

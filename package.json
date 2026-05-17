@@ -46,15 +46,15 @@
   "devDependencies": {
     "jest": "30.3.0",
     "jest-environment-jsdom": "30.3.0",
-    "power-assert": "1.6.1",
-    "ws": "8.20.0",
     "npm": "11.13.0",
-    "pnpm": "11.0.3"
+    "pnpm": "11.0.3",
+    "power-assert": "1.6.1",
+    "ws": "8.20.0"
   },
   "dependencies": {
-    "cors": "*",
-    "express": "*",
-    "hugerte": "*",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "hugerte": "^1.0.10",
     "inter-mediator-expressionparser": "1.2.2",
     "inter-mediator-formatter": "1.1.0",
     "inter-mediator-locale": "1.0.4",
@@ -72,7 +72,7 @@
     "inter-mediator-queue": "1.0.9",
     "jssha": "3.3.1",
     "nodemon": "3.1.14",
-    "npm-platform-dependencies": "*",
+    "npm-platform-dependencies": "^0.1.0",
     "socket.io": "4.8.3",
     "socket.io-client": "4.8.3"
   },
