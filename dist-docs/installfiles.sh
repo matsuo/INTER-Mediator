@@ -13,27 +13,26 @@ echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
 mv '__Did_you_run_composer_update.txt' spec/tempfile
-composer install
-./node_modules/.bin/pnpm install --frozen-lockfile
+composer update
 mv spec/tempfile '__Did_you_run_composer_update.txt'
 
 cd spec/run
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-./node_modules/.bin/pnpm install --frozen-lockfile
+../../node_modules/.bin/pnpm install --frozen-lockfile
 
 cd ../run_v8
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-./node_modules/.bin/pnpm install --frozen-lockfile
+../../node_modules/.bin/pnpm install --frozen-lockfile
 
 cd ../run-safari
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-./node_modules/.bin/pnpm install --frozen-lockfile
+../../node_modules/.bin/pnpm install --frozen-lockfile
 
 # brew unlink php@7.4
 # brew link php
