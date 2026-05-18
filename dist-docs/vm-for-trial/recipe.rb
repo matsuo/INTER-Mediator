@@ -2010,9 +2010,6 @@ if node[:platform] == 'redhat' && node[:virtualization][:system] != 'docker'
       action :install
     end
   end
-  execute 'setsebool -P samba_export_all_rw 1' do
-    command 'setsebool -P samba_export_all_rw 1'
-  end
   execute "cd \"#{IMSELINUX}\" && semodule -i inter-mediator.pp" do
     command "cd \"#{IMSELINUX}\" && semodule -i inter-mediator.pp"
   end
